@@ -9,39 +9,64 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen> {
+  late ImageProvider backgroundImage;
+  bool _isImageLoaded = false;
+
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
-    Future.delayed(Duration(seconds: 5), () {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (_) => HomeScreen(),
-      ));
-    });
+    backgroundImage = const AssetImage('assets/images/bg.jpg');
+
+    // Preload the image
+    final ImageStream stream =
+        backgroundImage.resolve(const ImageConfiguration());
+    stream.addListener(ImageStreamListener((_, __) {
+      if (mounted) {
+        setState(() {
+          _isImageLoaded = true;
+        });
+
+        // Navigate after the image is loaded & 5-second delay
+        Future.delayed(const Duration(seconds: 3), () {
+          if (mounted) {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (_) => const HomeScreen(),
+            ));
+          }
+        });
+      }
+    }));
   }
 
   @override
   void dispose() {
-    super.dispose();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // Render nothing until the image is fully loaded
+    if (!_isImageLoaded) {
+      return Container(color: Colors.black);
+    }
+
     return Scaffold(
       body: Stack(
         children: [
           ColorFiltered(
             colorFilter: ColorFilter.mode(
                 Colors.black.withAlpha((0.5 * 255).toInt()), BlendMode.darken),
-            child: Image.asset('assets/images/bg.jpg',
-                fit: BoxFit.cover,
-                height: double.infinity,
-                width: double.infinity),
+            child: Image(
+              image: backgroundImage,
+              fit: BoxFit.cover,
+              height: double.infinity,
+              width: double.infinity,
+            ),
           ),
           Positioned(
             top: 200,
@@ -51,10 +76,10 @@ class _SplashScreenState extends State<SplashScreen>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 50), // Add some space at the top
+                  const SizedBox(height: 50),
                   Icon(Icons.menu_book_outlined,
                       size: 100, color: Colors.amber[400]),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     'Library',
                     style: TextStyle(
@@ -64,7 +89,7 @@ class _SplashScreenState extends State<SplashScreen>
                       letterSpacing: 1,
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(
                     'Your Personal Library',
                     style: TextStyle(
@@ -74,7 +99,7 @@ class _SplashScreenState extends State<SplashScreen>
                       letterSpacing: 1,
                     ),
                   ),
-                  SizedBox(height: 50),
+                  const SizedBox(height: 50),
                   CircularProgressIndicator(
                     color: Colors.amber[800],
                   ),
@@ -87,6 +112,3 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 }
-
-
-// CircularProgressIndicator(),

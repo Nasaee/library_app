@@ -1,0 +1,2 @@
+/Users/tlo-07/Desktop/library_app/android/app/.cxx/Debug/z75i3a6z/x86/CMakeFiles/edit_cache.dir
+/Users/tlo-07/Desktop/library_app/android/app/.cxx/Debug/z75i3a6z/x86/CMakeFiles/rebuild_cache.dir
