@@ -1,0 +1,2 @@
+/home/nasaee/developments/projects/library_app/android/app/.cxx/Debug/3u5r1g3c/x86_64/CMakeFiles/edit_cache.dir
+/home/nasaee/developments/projects/library_app/android/app/.cxx/Debug/3u5r1g3c/x86_64/CMakeFiles/rebuild_cache.dir
