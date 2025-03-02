@@ -6,6 +6,7 @@ class CustomTextInput extends StatelessWidget {
   final TextEditingController controller;
   final int maxLines;
   final String? Function(String?) validator;
+  final VoidCallback? onChanged; // ✅ Callback when user types
 
   const CustomTextInput({
     super.key,
@@ -14,6 +15,7 @@ class CustomTextInput extends StatelessWidget {
     required this.controller,
     this.maxLines = 1,
     required this.validator,
+    this.onChanged, // ✅ Receive function to reset validation
   });
 
   @override
@@ -36,6 +38,11 @@ class CustomTextInput extends StatelessWidget {
             ),
           ),
           validator: validator,
+          onChanged: (value) {
+            if (onChanged != null) {
+              onChanged!(); // ✅ Reset validation when typing
+            }
+          },
         ),
       ],
     );

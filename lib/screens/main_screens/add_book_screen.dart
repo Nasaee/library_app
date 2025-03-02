@@ -91,6 +91,8 @@ class _AddBookScreenState extends State<AddBookScreen> {
                     label: 'Name',
                     hint: 'Enter book\'s name',
                     controller: _nameController,
+                    onChanged: () =>
+                        setState(() {}), // ✅ Reset error when typing
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Book name cannot be empty';
@@ -107,6 +109,8 @@ class _AddBookScreenState extends State<AddBookScreen> {
                     hint: 'Enter the description of the book',
                     controller: _descriptionController,
                     maxLines: 5,
+                    onChanged: () =>
+                        setState(() {}), // ✅ Reset error when typing
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Description cannot be empty';

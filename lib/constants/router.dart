@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:library_app/screens/main_screens/add_book_screen.dart';
+import 'package:library_app/screens/main_screens/add_category.dart';
 import 'package:library_app/screens/main_screens/home_screen.dart';
 import 'package:library_app/screens/main_screens/library_screen.dart';
 import 'package:library_app/screens/main_screens/main_screen.dart';
@@ -45,6 +46,11 @@ final GoRouter router = GoRouter(
           path: AddBookScreen.routeName,
           name: AddBookScreen.routeName,
           builder: (context, state) => const AddBookScreen(),
+        ),
+        GoRoute(
+          path: AddCategoryScreen.routeName,
+          name: AddCategoryScreen.routeName,
+          builder: (context, state) => const AddCategoryScreen(),
         ),
       ],
     ),
