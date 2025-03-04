@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:library_app/constants/theme.dart';
 
 class SearchScreen extends StatefulWidget {
   static const String routeName = '/search';
@@ -13,7 +14,12 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Container(
       child: const Center(
-        child: Text('Search Screen'),
+        child: Scaffold(
+          backgroundColor: bgColor,
+          body: Center(
+            child: Text('Search Screen'),
+          ),
+        ),
       ),
     );
   }
