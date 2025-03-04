@@ -89,7 +89,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     size: 100, color: Colors.amber[400]),
                 const SizedBox(height: 20),
                 Text(
-                  'Library',
+                  'Albrain Books',
                   style: TextStyle(
                     color: Colors.amber[500],
                     fontSize: 30,
