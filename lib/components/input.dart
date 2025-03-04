@@ -35,6 +35,23 @@ class CustomTextInput extends StatelessWidget {
             hintText: hint,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
+              borderSide:
+                  const BorderSide(color: Colors.grey), // Default border color
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                  color: Colors.orange), // Border color when focused
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                  color: Colors.grey), // Border color when enabled
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                  color: Colors.red), // Border color when error
             ),
           ),
           validator: validator,
