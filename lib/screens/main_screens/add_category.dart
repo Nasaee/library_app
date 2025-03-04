@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:library_app/constants/theme.dart';
 import 'package:library_app/models/category_model.dart';
 import 'package:library_app/providers/category_provider.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: bgColor,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Center(
@@ -51,7 +53,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                     labelStyle: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: Colors.black54,
+                      color: Colors.black,
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.orange),
@@ -81,7 +83,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black54,
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 8),

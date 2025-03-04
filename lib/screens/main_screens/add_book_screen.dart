@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:library_app/components/input.dart';
+import 'package:library_app/constants/theme.dart';
 import 'package:library_app/models/book_model.dart';
 import 'package:library_app/models/category_model.dart';
 import 'package:library_app/providers/book_provider.dart';
@@ -38,7 +39,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
     final bookProvider = Provider.of<BookProvider>(context, listen: false);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: bgColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
