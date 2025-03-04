@@ -77,49 +77,6 @@ class _AddBookScreenState extends State<AddBookScreen> {
                           : null,
                     ),
                   ),
-                  SizedBox(height: 16),
-                  // ⭐ Rating System
-                  Column(
-                    children: [
-                      const SizedBox(
-                        width: double.infinity,
-                        child: Text(
-                          'Rating',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          for (int i = 1; i <= 5; i++)
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _rating = i;
-                                });
-                              },
-                              icon: Icon(
-                                i <= _rating ? Icons.star : Icons.star_border,
-                                color: Colors.amber,
-                                size: 30,
-                              ),
-                            ),
-                        ],
-                      ),
-                      if (_rating == 0 && _submitted)
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              'Please provide a rating',
-                              style: TextStyle(color: Colors.red, fontSize: 12),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
 
                   SizedBox(height: 16),
 
@@ -200,6 +157,50 @@ class _AddBookScreenState extends State<AddBookScreen> {
                     controller: _authorController,
                     onChanged: () => setState(() {}),
                     validator: (value) => null, // ✅ No validation required
+                  ),
+
+                  SizedBox(height: 16),
+                  // ⭐ Rating System
+                  Column(
+                    children: [
+                      const SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          'Rating',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          for (int i = 1; i <= 5; i++)
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _rating = i;
+                                });
+                              },
+                              icon: Icon(
+                                i <= _rating ? Icons.star : Icons.star_border,
+                                color: Colors.amber,
+                                size: 30,
+                              ),
+                            ),
+                        ],
+                      ),
+                      if (_rating == 0 && _submitted)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              'Please provide a rating',
+                              style: TextStyle(color: Colors.red, fontSize: 12),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
 
                   const SizedBox(height: 24),
