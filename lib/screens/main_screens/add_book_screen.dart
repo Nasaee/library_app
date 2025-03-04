@@ -56,7 +56,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                     onTap: _pickImage,
                     child: Container(
                       width: double.infinity,
-                      height: 250,
+                      height: 230,
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
@@ -141,7 +141,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                     label: 'Description',
                     hint: 'Enter book description',
                     controller: _descriptionController,
-                    maxLines: 5,
+                    maxLines: 2,
                     onChanged: () => setState(() {}),
                     validator: (value) => value == null || value.isEmpty
                         ? 'Description cannot be empty'
@@ -212,8 +212,12 @@ class _AddBookScreenState extends State<AddBookScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.amber[700],
                       ),
-                      child: const Text('Save',
-                          style: TextStyle(color: Colors.white)),
+                      child: const Text('SAVE',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                          )),
                     ),
                   ),
                 ],
