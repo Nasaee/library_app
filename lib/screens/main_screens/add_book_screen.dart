@@ -1,4 +1,7 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:library_app/components/input.dart';
 import 'package:library_app/models/category_model.dart';
 import 'package:library_app/providers/category_provider.dart';
@@ -19,6 +22,10 @@ class _AddBookScreenState extends State<AddBookScreen> {
   int _rating = 0;
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
+  File? _selectedImage; // ✅ Store picked image
+  Uint8List? _imageBytes; // ✅ Convert to bytes for database storage
+  final ImagePicker _picker = ImagePicker();
+  final _authorController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,24 +45,30 @@ class _AddBookScreenState extends State<AddBookScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: double.infinity,
-                    height: 250,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          padding: const EdgeInsets.all(10),
-                          onPressed: () {},
-                          icon:
-                              const Icon(Icons.add_a_photo_outlined, size: 30),
-                        ),
-                        const Text('Add a photo'),
-                      ],
+                  // 📷 Image Picker
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      width: double.infinity,
+                      height: 250,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                        image: _selectedImage != null
+                            ? DecorationImage(
+                                image: FileImage(_selectedImage!),
+                                fit: BoxFit.cover)
+                            : null,
+                      ),
+                      child: _selectedImage == null
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.add_a_photo_outlined, size: 30),
+                                const Text('Tap to pick an image'),
+                              ],
+                            )
+                          : null,
                     ),
                   ),
                   SizedBox(height: 16),
@@ -151,10 +164,28 @@ class _AddBookScreenState extends State<AddBookScreen> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: Colors.orange, // Change to desired color
+                          width: 2.0,
+                        ),
+                      ),
                       errorText: _submitted && _selectedCategory == null
                           ? 'Please select a category'
                           : null, // ✅ Show error after submit
                     ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // ✍️ Author Input (Optional)
+                  CustomTextInput(
+                    label: 'Author (Optional)',
+                    hint: 'Enter author name',
+                    controller: _authorController,
+                    onChanged: () => setState(() {}),
+                    validator: (value) => null, // ✅ No validation required
                   ),
 
                   const SizedBox(height: 24),
@@ -180,16 +211,30 @@ class _AddBookScreenState extends State<AddBookScreen> {
     );
   }
 
+  /// ✅ Pick an image from the gallery
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      final bytes = await image.readAsBytes();
+      setState(() {
+        _selectedImage = File(image.path);
+        _imageBytes = bytes;
+      });
+    }
+  }
+
   /// ✅ Validate and Save Book
   void _saveBook() {
     setState(() {
-      _submitted = true; // ✅ Show validation on submit
+      _submitted = true;
     });
 
-    if (_formKey.currentState!.validate() && _selectedCategory != null ||
+    if (_formKey.currentState!.validate() &&
+        _selectedCategory != null &&
         _rating > 0) {
       print(
-          '✅ Book Saved: Name - ${_nameController.text}, Category - $_selectedCategory, Rating - $_rating');
+          '✅ Book Saved: Name - ${_nameController.text}, Category - $_selectedCategory, Rating - $_rating, Image - ${_imageBytes != null ? 'Yes' : 'No'}');
       _resetForm();
     }
   }
@@ -202,6 +247,9 @@ class _AddBookScreenState extends State<AddBookScreen> {
       _submitted = false;
       _selectedCategory = null;
       _rating = 0;
+      _selectedImage = null;
+      _imageBytes = null;
+      _authorController.clear();
     });
   }
 

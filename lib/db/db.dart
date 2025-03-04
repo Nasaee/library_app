@@ -1,3 +1,4 @@
+import 'package:library_app/configs/db_config.dart';
 import 'package:library_app/models/category_model.dart';
 import 'package:path/path.dart' as P;
 import 'package:sqflite/sqflite.dart';
@@ -20,31 +21,12 @@ class DatabaseHelper {
       dbPath,
       version: DB_VERSION,
       onCreate: (db, version) async {
-        await db.execute(_createTableCategory);
+        await db.execute(createTableCategory);
       },
     );
 
     return _database!;
   }
-
-  final String _createTableCategory = '''
-  CREATE TABLE $tableCategory (
-    $tblCategoryId INTEGER PRIMARY KEY AUTOINCREMENT,
-    $tblCategoryName TEXT NOT NULL UNIQUE, 
-    $tblCategoryDescription TEXT NOT NULL,
-    $tblCategoryCreatedAt TEXT DEFAULT CURRENT_TIMESTAMP,  
-    $tblCategoryUpdatedAt TEXT DEFAULT CURRENT_TIMESTAMP  
-  );
-
-  -- ✅ TRIGGER: Automatically update 'updatedAt' on modification
-  CREATE TRIGGER update_category_updatedAt
-  AFTER UPDATE ON $tableCategory
-  FOR EACH ROW
-  BEGIN
-    UPDATE $tableCategory SET $tblCategoryUpdatedAt = CURRENT_TIMESTAMP
-    WHERE $tblCategoryId = OLD.$tblCategoryId;
-  END;
-''';
 
   /// ✅ Public method to insert default categories **only if the table is empty**
   Future<void> ensureDefaultCategories() async {
