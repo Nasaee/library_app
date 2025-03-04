@@ -1,9 +1,10 @@
 import 'package:library_app/configs/db_config.dart';
+import 'package:library_app/models/book_model.dart';
 import 'package:library_app/models/category_model.dart';
 import 'package:path/path.dart' as P;
 import 'package:sqflite/sqflite.dart';
 
-const int DB_VERSION = 1;
+const int DB_VERSION = 2;
 const String DB_NAME = 'library.db';
 
 class DatabaseHelper {
@@ -22,6 +23,10 @@ class DatabaseHelper {
       version: DB_VERSION,
       onCreate: (db, version) async {
         await db.execute(createTableCategory);
+        await db.execute(createTableBook);
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        await db.execute(createTableBook); // ✅ Ensure books table exists
       },
     );
 
@@ -80,5 +85,49 @@ class DatabaseHelper {
     final List<Map<String, dynamic>> maps = await db.query(tableCategory);
 
     return maps.map((map) => CategoryModel.fromMap(map)).toList();
+  }
+
+  // ! Method for book operations
+  // 🔹 **INSERT BOOK**
+  Future<int> insertBook(BookModel book) async {
+    final db = await _openDb();
+    final id = await db.insert(tableBook, book.toMap());
+    return id;
+  }
+
+  // 🔹 **GET ALL BOOKS**
+  Future<List<BookModel>> getAllBooks() async {
+    final db = await _openDb();
+    final List<Map<String, dynamic>> maps = await db.query(tableBook);
+    return maps.map((map) => BookModel.fromMap(map)).toList();
+  }
+
+  // 🔹 **GET BOOK BY ID**
+  Future<BookModel?> getBookById(int id) async {
+    final db = await _openDb();
+    final List<Map<String, dynamic>> maps =
+        await db.query(tableBook, where: '$tblBookId = ?', whereArgs: [id]);
+
+    if (maps.isNotEmpty) {
+      return BookModel.fromMap(maps.first);
+    }
+    return null;
+  }
+
+  // 🔹 **UPDATE BOOK**
+  Future<int> updateBook(BookModel book) async {
+    final db = await _openDb();
+    return await db.update(
+      tableBook,
+      book.toMap(),
+      where: '$tblBookId = ?',
+      whereArgs: [book.id],
+    );
+  }
+
+  // 🔹 **DELETE BOOK**
+  Future<int> deleteBook(int id) async {
+    final db = await _openDb();
+    return await db.delete(tableBook, where: '$tblBookId = ?', whereArgs: [id]);
   }
 }

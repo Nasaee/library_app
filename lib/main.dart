@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:library_app/constants/router.dart';
 import 'package:library_app/db/db.dart';
+import 'package:library_app/providers/book_provider.dart';
 import 'package:library_app/providers/category_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(
             create: (context) => CategoryProvider()), // ✅ Provide globally
+        ChangeNotifierProvider(create: (context) => BookProvider()),
       ],
       child: const MyApp(),
     ),

@@ -1,10 +1,15 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:library_app/components/input.dart';
+import 'package:library_app/models/book_model.dart';
 import 'package:library_app/models/category_model.dart';
+import 'package:library_app/providers/book_provider.dart';
 import 'package:library_app/providers/category_provider.dart';
+import 'package:library_app/screens/main_screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
 class AddBookScreen extends StatefulWidget {
@@ -30,6 +35,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
   @override
   Widget build(BuildContext context) {
     final categoryProvider = Provider.of<CategoryProvider>(context);
+    final bookProvider = Provider.of<BookProvider>(context, listen: false);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -75,6 +81,14 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   // ⭐ Rating System
                   Column(
                     children: [
+                      const SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          'Rating',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                      ),
                       Row(
                         children: [
                           for (int i = 1; i <= 5; i++)
@@ -194,7 +208,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: _saveBook,
+                      onPressed: () => _saveBook(bookProvider),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.amber[700],
                       ),
@@ -225,7 +239,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
   }
 
   /// ✅ Validate and Save Book
-  void _saveBook() {
+  void _saveBook(BookProvider bookProvider) {
     setState(() {
       _submitted = true;
     });
@@ -233,10 +247,35 @@ class _AddBookScreenState extends State<AddBookScreen> {
     if (_formKey.currentState!.validate() &&
         _selectedCategory != null &&
         _rating > 0) {
-      print(
-          '✅ Book Saved: Name - ${_nameController.text}, Category - $_selectedCategory, Rating - $_rating, Image - ${_imageBytes != null ? 'Yes' : 'No'}');
-      _resetForm();
+      final book = BookModel(
+        name: _nameController.text,
+        description: _descriptionController.text,
+        categoryId: 1, // Fetch categoryId properly
+        auther: _authorController.text,
+        rating: _rating,
+        imageBlob: _imageBytes!,
+      );
+
+      bookProvider.insertBook(book).then((id) {
+        if (id > 0) {
+          _showToast('Book added successfully');
+          context.goNamed(HomeScreen.routeName);
+          _resetForm();
+        }
+      });
     }
+  }
+
+  /// ✅ Show toast message using `fluttertoast`
+  void _showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      backgroundColor: Colors.black87,
+      textColor: Colors.white,
+      fontSize: 14,
+    );
   }
 
   /// ✅ Reset form fields after successful book addition
